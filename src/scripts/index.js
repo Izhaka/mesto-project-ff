@@ -186,29 +186,31 @@ newCardOpenPopupButton.addEventListener('click', () => {
 
 function createNewCardObject(formElement) {
   const newCard = {};
-
-  const name = formElement['name'];
+console.log(newCard, newCardForm)
+  const name = formElement.elements['place-name'];
   const link = formElement.elements.link;
-  console.log(name.value, link)
+  console.log(name, newCard)
   newCard.name = name.value;
   newCard.link = link.value;
+  console.log(name.value, newCard.link)
+  return newCard;
 }
+
+const testCard = { name: 'izhunya', link: 'https://i.pinimg.com/736x/37/5d/23/375d23c486638ab9e37f83095c8ce12e.jpg'}
 
 function handleNewCardFormSubmit(evt) {
   evt.preventDefault();
-console.log(newCardForm)
   const newCardObject = createNewCardObject(newCardForm);
-  const newCard = createCard(newCardObject, deleteCardHandler);
+  const newCard = createCard(newCardObject, deleteCardHandler, handleCardLikeButton, openPopupImageZoom);
 
-  closePopup(profilePopup);
+  closePopup(newCardPopup);
   resetFormFields(newCardForm);
   renderCard(newCard, cardsContainer);
-  updateInitialCards(newCard, initialCards);
-  console.log(initialCards, newCard)
+  updateInitialCards(newCardObject, initialCards);
 }
 
 function updateInitialCards(cardObject, cardsArray) {
-  cardsArray.append(cardObject);
+  cardsArray.push(cardObject);
 }
 
 newCardForm.addEventListener('submit', handleNewCardFormSubmit);
