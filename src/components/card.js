@@ -1,5 +1,11 @@
-function createCard(cardTemplate, cardData, deleteCardHandler, cardLikeButtonHandler, onZoomPopupHandler) {
-  const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
+function createCard(
+  cardTemplate,
+  cardData,
+  deleteCardHandler,
+  cardLikeButtonHandler,
+  onZoomPopupHandler
+) {
+  const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
   const cardImage = cardElement.querySelector(".card__image");
   const cardTitle = cardElement.querySelector(".card__title");
   const cardDeleteButton = cardElement.querySelector(".card__delete-button");
@@ -13,11 +19,11 @@ function createCard(cardTemplate, cardData, deleteCardHandler, cardLikeButtonHan
     deleteCardHandler(cardElement);
   });
 
-  cardLikeButton.addEventListener('click', () => {
-    cardLikeButtonHandler(cardLikeButton)
+  cardLikeButton.addEventListener("click", () => {
+    cardLikeButtonHandler(cardLikeButton);
   });
 
-  cardImage.addEventListener('click', () => {
+  cardImage.addEventListener("click", () => {
     onZoomPopupHandler(cardImage.src, cardImage.alt, cardTitle.textContent);
   });
 
@@ -29,7 +35,7 @@ function onDeleteCard(card) {
 }
 
 function onLikeCard(cardLikeButton) {
-  cardLikeButton.classList.toggle('card__like-button_is-active');
+  cardLikeButton.classList.toggle("card__like-button_is-active");
 }
 
 export { createCard, onDeleteCard, onLikeCard };

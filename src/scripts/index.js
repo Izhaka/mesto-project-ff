@@ -1,36 +1,39 @@
-import '../pages/index.css';
-import { initialCards } from './cards.js';
-import { createCard, onDeleteCard, onLikeCard } from '../components/card.js';
-import { openPopup, closePopup, closePopupByOverlay } from '../components/modal.js';
+import "../pages/index.css";
+import { initialCards } from "./cards.js";
+import { createCard, onDeleteCard, onLikeCard } from "../components/card.js";
+import {
+  openPopup,
+  closePopup,
+  closePopupByOverlay,
+} from "../components/modal.js";
 
 // DOM-элементы, глобальные переменные
 const cardTemplate = document.querySelector("#card-template").content;
 const cardsContainer = document.querySelector(".places__list");
 
-const allPopups = document.querySelectorAll('.popup');
+const allPopups = document.querySelectorAll(".popup");
 
-const profileOpenPopupButton = document.querySelector('.profile__edit-button');
-const profilePopup = document.querySelector('.popup_type_edit');
-const profileForm = document.forms['edit-profile'];
-const profileName = document.querySelector('.profile__title');
-const profileJob = document.querySelector('.profile__description');
+const profileOpenPopupButton = document.querySelector(".profile__edit-button");
+const profilePopup = document.querySelector(".popup_type_edit");
+const profileForm = document.forms["edit-profile"];
+const profileName = document.querySelector(".profile__title");
+const profileJob = document.querySelector(".profile__description");
 
-const newCardOpenPopupButton = document.querySelector('.profile__add-button');
-const newCardPopup = document.querySelector('.popup_type_new-card');
-const newCardForm = document.forms['new-place'];
+const newCardOpenPopupButton = document.querySelector(".profile__add-button");
+const newCardPopup = document.querySelector(".popup_type_new-card");
+const newCardForm = document.forms["new-place"];
 
-const popupImageZoom = document.querySelector('.popup_type_image');
-const popupImage = popupImageZoom.querySelector('.popup__image');
-const popupImageCaption = popupImageZoom.querySelector('.popup__caption');
-
+const popupImageZoom = document.querySelector(".popup_type_image");
+const popupImage = popupImageZoom.querySelector(".popup__image");
+const popupImageCaption = popupImageZoom.querySelector(".popup__caption");
 
 // Слушатели для профиля
-profileOpenPopupButton.addEventListener('click', () => {
+profileOpenPopupButton.addEventListener("click", () => {
   fillProfilePopup(profileForm);
   openPopup(profilePopup);
 });
 
-profileForm.addEventListener('submit', handleProfileFormSubmit);
+profileForm.addEventListener("submit", handleProfileFormSubmit);
 
 // Обработчик события submit для профиля
 function handleProfileFormSubmit(evt) {
@@ -58,18 +61,24 @@ function updateProfileInfo(formElement) {
 }
 
 // Слушатели для окна добавления карточки
-newCardOpenPopupButton.addEventListener('click', () => {
+newCardOpenPopupButton.addEventListener("click", () => {
   newCardForm.reset();
   openPopup(newCardPopup);
 });
 
-newCardForm.addEventListener('submit', handleNewCardFormSubmit);
+newCardForm.addEventListener("submit", handleNewCardFormSubmit);
 
 // Обработчик события submit для добавления карточки
 function handleNewCardFormSubmit(evt) {
   evt.preventDefault();
   const newCardData = getNewCardData(newCardForm);
-  const newCard = createCard(cardTemplate, newCardData, onDeleteCard, onLikeCard, openImageZoomPopup);
+  const newCard = createCard(
+    cardTemplate,
+    newCardData,
+    onDeleteCard,
+    onLikeCard,
+    openImageZoomPopup
+  );
 
   closePopup(newCardPopup);
   newCardForm.reset();
@@ -78,12 +87,12 @@ function handleNewCardFormSubmit(evt) {
 
 // Создание объекта новой карточки
 function getNewCardData(formElement) {
-  const name = formElement.elements['place-name'];
+  const name = formElement.elements["place-name"];
   const link = formElement.elements.link;
 
   return {
     name: name.value,
-    link: link.value
+    link: link.value,
   };
 }
 
@@ -98,19 +107,25 @@ function openImageZoomPopup(imgUrl, imgAlt, imgCaption) {
 
 // Добавление слушателей закрытия окна по кнопке и оверлею
 allPopups.forEach((popup) => {
-  const closeButton = popup.querySelector('.popup__close');
+  const closeButton = popup.querySelector(".popup__close");
 
-  closeButton.addEventListener('click', () => {
+  closeButton.addEventListener("click", () => {
     closePopup(popup);
   });
 
-  popup.addEventListener('mousedown', (evt) => {
-    closePopupByOverlay(evt)
-  })
+  popup.addEventListener("mousedown", (evt) => {
+    closePopupByOverlay(evt);
+  });
 });
 
 // Рендер первых шести карточек при открытии страницы
 initialCards.forEach((cardData) => {
-  const cardItem = createCard(cardTemplate, cardData, onDeleteCard, onLikeCard, openImageZoomPopup);
+  const cardItem = createCard(
+    cardTemplate,
+    cardData,
+    onDeleteCard,
+    onLikeCard,
+    openImageZoomPopup
+  );
   cardsContainer.append(cardItem);
 });
