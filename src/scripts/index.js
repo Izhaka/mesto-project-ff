@@ -57,7 +57,7 @@ function getNewCardData(formElement) {
 }
 
 /** Обработчик открытия формы редактирования профиля */
-function setProfilePopupButtonListener() {
+function handleProfileOpenPopup() {
   fillProfilePopup(profileForm);
   openPopup(profilePopup);
 }
@@ -96,7 +96,7 @@ function openImageZoomPopup(imgUrl, imgAlt, imgCaption) {
   openPopup(popupImageZoom);
 }
 
-profileOpenPopupButton.addEventListener("click", setProfilePopupButtonListener);
+profileOpenPopupButton.addEventListener("click", handleProfileOpenPopup);
 profileForm.addEventListener("submit", handleProfileFormSubmit);
 
 newCardOpenPopupButton.addEventListener("click", () => {
