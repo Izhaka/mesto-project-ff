@@ -4,10 +4,10 @@ import { createCard, onDeleteCard, onLikeCard } from "../components/card.js";
 import {
   openPopup,
   closePopup,
-  closePopupByOverlay,
+  setCloseModalByClickListeners,
 } from "../components/modal.js";
 
-// DOM-элементы, глобальные переменные
+/** DOM-элементы, глобальные переменные */
 const cardTemplate = document.querySelector("#card-template").content;
 const cardsContainer = document.querySelector(".places__list");
 
@@ -27,23 +27,7 @@ const popupImageZoom = document.querySelector(".popup_type_image");
 const popupImage = popupImageZoom.querySelector(".popup__image");
 const popupImageCaption = popupImageZoom.querySelector(".popup__caption");
 
-// Слушатели для профиля
-profileOpenPopupButton.addEventListener("click", () => {
-  fillProfilePopup(profileForm);
-  openPopup(profilePopup);
-});
-
-profileForm.addEventListener("submit", handleProfileFormSubmit);
-
-// Обработчик события submit для профиля
-function handleProfileFormSubmit(evt) {
-  evt.preventDefault();
-  updateProfileInfo(profileForm);
-  closePopup(profilePopup);
-  profileForm.reset();
-}
-
-// Редактирование профиля
+/** Заполнение полей формы редактирования профиля */
 function fillProfilePopup(formElement) {
   const name = formElement.elements.name;
   const description = formElement.elements.description;
@@ -52,6 +36,7 @@ function fillProfilePopup(formElement) {
   description.value = profileJob.textContent;
 }
 
+/** Редактирование профиля */
 function updateProfileInfo(formElement) {
   const name = formElement.elements.name.value;
   const description = formElement.elements.description.value;
@@ -60,15 +45,32 @@ function updateProfileInfo(formElement) {
   profileJob.textContent = description;
 }
 
-// Слушатели для окна добавления карточки
-newCardOpenPopupButton.addEventListener("click", () => {
-  newCardForm.reset();
-  openPopup(newCardPopup);
-});
+/** Создание объекта новой карточки */
+function getNewCardData(formElement) {
+  const name = formElement.elements["place-name"];
+  const link = formElement.elements.link;
 
-newCardForm.addEventListener("submit", handleNewCardFormSubmit);
+  return {
+    name: name.value,
+    link: link.value,
+  };
+}
 
-// Обработчик события submit для добавления карточки
+/** Обработчик открытия формы редактирования профиля */
+function setProfilePopupButtonListener() {
+  fillProfilePopup(profileForm);
+  openPopup(profilePopup);
+}
+
+/** Обработчик события submit для профиля */
+function handleProfileFormSubmit(evt) {
+  evt.preventDefault();
+  updateProfileInfo(profileForm);
+  closePopup(profilePopup);
+  profileForm.reset();
+}
+
+/** Обработчик события submit для добавления карточки */
 function handleNewCardFormSubmit(evt) {
   evt.preventDefault();
   const newCardData = getNewCardData(newCardForm);
@@ -85,18 +87,7 @@ function handleNewCardFormSubmit(evt) {
   cardsContainer.prepend(newCard);
 }
 
-// Создание объекта новой карточки
-function getNewCardData(formElement) {
-  const name = formElement.elements["place-name"];
-  const link = formElement.elements.link;
-
-  return {
-    name: name.value,
-    link: link.value,
-  };
-}
-
-// Увеличение изображения карточки, модальное окно
+/** Увеличение изображения карточки, модальное окно */
 function openImageZoomPopup(imgUrl, imgAlt, imgCaption) {
   popupImage.src = imgUrl;
   popupImage.alt = imgAlt;
@@ -105,20 +96,17 @@ function openImageZoomPopup(imgUrl, imgAlt, imgCaption) {
   openPopup(popupImageZoom);
 }
 
-// Добавление слушателей закрытия окна по кнопке и оверлею
-allPopups.forEach((popup) => {
-  const closeButton = popup.querySelector(".popup__close");
+profileOpenPopupButton.addEventListener("click", setProfilePopupButtonListener);
+profileForm.addEventListener("submit", handleProfileFormSubmit);
 
-  closeButton.addEventListener("click", () => {
-    closePopup(popup);
-  });
-
-  popup.addEventListener("mousedown", (evt) => {
-    closePopupByOverlay(evt);
-  });
+newCardOpenPopupButton.addEventListener("click", () => {
+  openPopup(newCardPopup);
 });
+newCardForm.addEventListener("submit", handleNewCardFormSubmit);
 
-// Рендер первых шести карточек при открытии страницы
+setCloseModalByClickListeners(allPopups);
+
+/** Рендер первых шести карточек при открытии страницы */
 initialCards.forEach((cardData) => {
   const cardItem = createCard(
     cardTemplate,

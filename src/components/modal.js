@@ -21,4 +21,18 @@ function closePopupByOverlay(evt) {
   }
 }
 
-export { openPopup, closePopup, closePopupByOverlay };
+function setCloseModalByClickListeners(popupsList) {
+  popupsList.forEach((popup) => {
+    const closeButton = popup.querySelector(".popup__close");
+
+    closeButton.addEventListener("click", () => {
+      closePopup(popup);
+    });
+
+    popup.addEventListener("mousedown", (evt) => {
+      closePopupByOverlay(evt);
+    });
+  });
+}
+
+export { openPopup, closePopup, setCloseModalByClickListeners };
